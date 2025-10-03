@@ -1,203 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My To-Do List + Clock</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My To-Do List with Clock</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-        /* Clock style */
-        #clock {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            background: #333;
-            padding: 8px 15px;
-            border-radius: 10px;
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.4);
-        }
+    /* Clock styling */
+    #clock {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px;
+      padding: 10px 20px;
+      background: #333;
+      color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
 
-        /* Todo container */
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
-        }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
 
-        #taskInput {
-            width: calc(100% - 70px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+    #taskInput {
+      width: calc(100% - 70px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
 
-        #addButton {
-            width: 60px;
-            padding: 10px;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    #addButton {
+      width: 60px;
+      padding: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-        #addButton:hover {
-            background-color: #4cae4c;
-        }
+    #addButton:hover {
+      background-color: #4cae4c;
+    }
 
-        #taskList {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 20px;
-        }
+    #taskList {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
 
-        #taskList li {
-            background-color: #eee;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+    #taskList li {
+      background-color: #eee;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      transition: background-color 0.3s ease;
+    }
 
-        .task-text {
-            flex: 1;
-        }
+    .task-text {
+      flex: 1;
+      margin-right: 10px;
+    }
 
-        .buttons {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-        }
+    .status-buttons button {
+      margin: 2px;
+      padding: 5px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
 
-        .buttons button {
-            padding: 5px 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
+    .started {
+      background-color: #0275d8;
+      color: white;
+    }
 
-        .started { background-color: #ffc107; color: #000; }
-        .half { background-color: #17a2b8; color: white; }
-        .done { background-color: #28a745; color: white; }
-        .delete { background-color: #d9534f; color: white; }
-    </style>
+    .halfway {
+      background-color: #f0ad4e;
+      color: white;
+    }
+
+    .done {
+      background-color: #5cb85c;
+      color: white;
+    }
+
+    .delete {
+      background-color: #d9534f;
+      color: white;
+    }
+
+    /* States */
+    .started-state {
+      background-color: #d9edf7;
+    }
+    .halfway-state {
+      background-color: #fcf8e3;
+    }
+    .done-state {
+      background-color: #dff0d8;
+      text-decoration: line-through;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- CLOCK -->
-    <div id="clock"></div>
+  <!-- Clock -->
+  <div id="clock"></div>
 
-    <!-- TODO LIST -->
-    <div class="container">
-        <h1>My To-Do List</h1>
-        <input type="text" id="taskInput" placeholder="Add a new task...">
-        <button id="addButton">Add</button>
-        <ul id="taskList"></ul>
-    </div>
+  <div class="container">
+    <h1>My To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+    <button id="addButton">Add</button>
+    <ul id="taskList"></ul>
+  </div>
 
-    <script>
-        // === CLOCK ===
-        function updateClock() {
-            const now = new Date();
-            let hours = now.getHours();
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
+  <script>
+    // CLOCK SCRIPT
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
 
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            hours = hours.toString().padStart(2, '0');
+      hours = hours % 12;
+      hours = hours ? hours : 12; 
+      hours = hours.toString().padStart(2, '0');
 
-            // ✅ Fixed template literal
-            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
-            document.getElementById('clock').textContent = timeString;
+      const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+      document.getElementById('clock').textContent = timeString;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // TODO LIST SCRIPT
+    document.addEventListener('DOMContentLoaded', function() {
+      const taskInput = document.getElementById('taskInput');
+      const addButton = document.getElementById('addButton');
+      const taskList = document.getElementById('taskList');
+
+      function addTask() {
+        const taskText = taskInput.value.trim();
+
+        if (taskText !== "") {
+          const newTask = document.createElement('li');
+          const span = document.createElement('span');
+          span.classList.add('task-text');
+          span.textContent = taskText;
+
+          const buttonGroup = document.createElement('div');
+          buttonGroup.classList.add('status-buttons');
+
+          const startedBtn = document.createElement('button');
+          startedBtn.textContent = "Started";
+          startedBtn.classList.add('started');
+          startedBtn.onclick = () => {
+            newTask.className = 'started-state';
+          };
+
+          const halfwayBtn = document.createElement('button');
+          halfwayBtn.textContent = "50% done";
+          halfwayBtn.classList.add('halfway');
+          halfwayBtn.onclick = () => {
+            newTask.className = 'halfway-state';
+          };
+
+          const doneBtn = document.createElement('button');
+          doneBtn.textContent = "100% done";
+          doneBtn.classList.add('done');
+          doneBtn.onclick = () => {
+            newTask.className = 'done-state';
+          };
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = "Delete";
+          deleteBtn.classList.add('delete');
+          deleteBtn.onclick = () => {
+            taskList.removeChild(newTask);
+          };
+
+          buttonGroup.appendChild(startedBtn);
+          buttonGroup.appendChild(halfwayBtn);
+          buttonGroup.appendChild(doneBtn);
+          buttonGroup.appendChild(deleteBtn);
+
+          newTask.appendChild(span);
+          newTask.appendChild(buttonGroup);
+
+          taskList.appendChild(newTask);
+          taskInput.value = "";
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+      }
 
-        // === TODO LIST ===
-        document.addEventListener('DOMContentLoaded', function() {
-            const taskInput = document.getElementById('taskInput');
-            const addButton = document.getElementById('addButton');
-            const taskList = document.getElementById('taskList');
-
-            function addTask() {
-                const taskText = taskInput.value.trim();
-                if (taskText !== "") {
-                    const newTask = document.createElement('li');
-                    
-                    newTask.innerHTML = `
-                        <span class="task-text">${taskText}</span>
-                        <div class="buttons">
-                            <button class="started">Started</button>
-                            <button class="half">50% done</button>
-                            <button class="done">100% done</button>
-                            <button class="delete">Delete</button>
-                        </div>
-                    `;
-
-                    // Buttons
-                    const taskTextEl = newTask.querySelector('.task-text');
-                    const startedBtn = newTask.querySelector('.started');
-                    const halfBtn = newTask.querySelector('.half');
-                    const doneBtn = newTask.querySelector('.done');
-                    const deleteBtn = newTask.querySelector('.delete');
-
-                    startedBtn.addEventListener('click', () => {
-                        taskTextEl.style.color = '#ffc107';
-                        taskTextEl.textContent = taskText + " → Started";
-                    });
-
-                    halfBtn.addEventListener('click', () => {
-                        taskTextEl.style.color = '#17a2b8';
-                        taskTextEl.textContent = taskText + " → 50% done";
-                    });
-
-                    doneBtn.addEventListener('click', () => {
-                        taskTextEl.style.color = '#28a745';
-                        taskTextEl.textContent = taskText + " → 100% done";
-                    });
-
-                    deleteBtn.addEventListener('click', () => {
-                        taskList.removeChild(newTask);
-                    });
-
-                    taskList.appendChild(newTask);
-                    taskInput.value = "";
-                }
-            }
-
-            addButton.addEventListener('click', addTask);
-            taskInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') addTask();
-            });
-        });
-    </script>
+      addButton.addEventListener('click', addTask);
+      taskInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') addTask();
+      });
+    });
+  </script>
 
 </body>
-</html>
+</html> 
